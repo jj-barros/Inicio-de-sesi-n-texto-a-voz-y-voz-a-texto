@@ -19,15 +19,27 @@ function App() {
   }
 
   //Funcion para ingresar al dar click en el boton
-  function ingresar() {
+  async function ingresar() {
     console.log('Usuario:', usuario)
     console.log('clave:', clave)
-    if (usuario === 'admin' && clave === 'admin') { //Si el usuario y clave son admin, ingresa al sistema
-      alert("Datos correctos")
-      setLogueado(true)
-    } else { //Si el ususario y la clave no son admin, no ingresa
-      alert("Datos incorrectos")
+    try {
+      // Peticion al servidor backend, para verificar si el usuario y la clave son correctos
+      const peticion = await fetch('http://localhost:3000/login?usuario=' + usuario + '&clave=' + clave)
+      if (peticion.ok) {
+        setLogueado(true)
+      } else {
+        alert('Datos incorrectos')
+      }
+    // eslint-disable-next-line no-unused-vars
+    } catch (error) {
+      alert('Datos incorrectos')
     }
+    // if (usuario === 'admin' && clave === 'admin') { //Si el usuario y clave son admin, ingresa al sistema
+    //   alert("Datos correctos")
+    //   setLogueado(true)
+    // } else { //Si el ususario y la clave no son admin, no ingresa
+    //   alert("Datos incorrectos")
+    // }
   }
 
   if (logueado) {
