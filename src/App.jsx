@@ -1,5 +1,7 @@
+/* eslint-disable no-empty */
+/* eslint-disable no-unused-vars */
 import './App.css'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Conversor from './Conversor'
 
 function App() {
@@ -24,23 +26,35 @@ function App() {
     console.log('clave:', clave)
     try {
       // Peticion al servidor backend, para verificar si el usuario y la clave son correctos
-      const peticion = await fetch('http://localhost:3000/login?usuario=' + usuario + '&clave=' + clave)
+      const peticion = await fetch('http://localhost:3000/login?usuario=' + usuario + '&clave=' + clave, { credentials: 'include' })
       if (peticion.ok) {
         setLogueado(true)
       } else {
         alert('Datos incorrectos')
       }
-    // eslint-disable-next-line no-unused-vars
+    
     } catch (error) {
       alert('Datos incorrectos')
     }
-    // if (usuario === 'admin' && clave === 'admin') { //Si el usuario y clave son admin, ingresa al sistema
-    //   alert("Datos correctos")
-    //   setLogueado(true)
-    // } else { //Si el ususario y la clave no son admin, no ingresa
-    //   alert("Datos incorrectos")
-    // }
   }
+
+  function validar() {
+    const validarSesion = async () => {
+      try {
+        // Peticion al servidor backend, para verificar si el usuario y la clave son correctos
+        const peticion = await fetch('http://localhost:3000/validar', { credentials: 'include' })
+        if (peticion.ok) {
+          setLogueado(true)
+        }
+      } catch (error) {
+      }
+    }
+    validarSesion();
+  }
+
+  useEffect(validar, [])
+
+  // Si el usuario esta logueado, se muestra el componente conversor
 
   if (logueado) {
     return(<><Conversor/></>)
